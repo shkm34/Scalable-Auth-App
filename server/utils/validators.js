@@ -1,4 +1,4 @@
-import { body } from 'express-validator';
+import { body, query, param} from 'express-validator';
 
 export const registerValidation = [
   body('name')
@@ -35,4 +35,69 @@ export const loginValidation = [
   body('password')
     .notEmpty()
     .withMessage('Password is required')
+];
+
+
+
+export const createTaskValidation = [
+  body('title')
+    .trim()
+    .notEmpty()
+    .withMessage('Task title is required')
+    .isLength({ max: 100 })
+    .withMessage('Title cannot exceed 100 characters'),
+  
+  body('description')
+    .trim()
+    .notEmpty()
+    .withMessage('Task description is required')
+    .isLength({ max: 500 })
+    .withMessage('Description cannot exceed 500 characters'),
+  
+  body('status')
+    .optional()
+    .isIn(['pending', 'in-progress', 'completed'])
+    .withMessage('Status must be one of: pending, in-progress, completed')
+];
+
+export const updateTaskValidation = [
+  body('title')
+    .optional()
+    .trim()
+    .notEmpty()
+    .withMessage('Task title cannot be empty')
+    .isLength({ max: 100 })
+    .withMessage('Title cannot exceed 100 characters'),
+  
+  body('description')
+    .optional()
+    .trim()
+    .notEmpty()
+    .withMessage('Task description cannot be empty')
+    .isLength({ max: 500 })
+    .withMessage('Description cannot exceed 500 characters'),
+  
+  body('status')
+    .optional()
+    .isIn(['pending', 'in-progress', 'completed'])
+    .withMessage('Status must be one of: pending, in-progress, completed')
+];
+
+export const taskIdValidation = [
+  param('id')
+    .isMongoId()
+    .withMessage('Invalid task ID format')
+];
+
+export const searchFilterValidation = [
+  query('search')
+    .optional()
+    .trim()
+    .isLength({ max: 100 })
+    .withMessage('Search query too long'),
+  
+  query('status')
+    .optional()
+    .isIn(['pending', 'in-progress', 'completed'])
+    .withMessage('Invalid status filter')
 ];
