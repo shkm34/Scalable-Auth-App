@@ -8,6 +8,7 @@ import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoutes";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Dashboard from "./pages/Dashboard";
 import "./App.css";
 
 function App() {
@@ -24,11 +25,7 @@ function App() {
             path="/dashboard"
             element={
               <ProtectedRoute>
-                <div className="min-h-screen bg-gray-100 p-8">
-                  <h1 className="text-3xl font-bold">
-                    Dashboard 
-                  </h1>
-                </div>
+                <Dashboard />
               </ProtectedRoute>
             }
           />
