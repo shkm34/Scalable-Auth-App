@@ -134,7 +134,7 @@ This project demonstrates a production-ready full-stack application with a focus
 
 ### Backend Architecture (MVC Pattern)
 
----
+```text
 server/
 ├── config/ # Database and app configuration
 ├── controllers/ # Business logic (thin, focused functions)
@@ -142,7 +142,7 @@ server/
 ├── routes/ # API endpoints (routing only)
 ├── middleware/ # Reusable middleware (auth, error handling)
 └── utils/ # Helper functions (validators, JWT, constants)
-
+```
 ---
 
 **Why This Structure Scales:**
@@ -394,7 +394,7 @@ All errors follow this format:
 ---
 
 ## 📁 Project Structure
-
+```text
 ### Complete Backend Structure
 server/
 ├── config/
@@ -425,8 +425,6 @@ server/
 ├── .gitignore # Git ignore rules
 ├── server.js # Entry point
 └── package.json # Dependencies
-
-text
 
 ### Complete Frontend Structure
 client/
@@ -465,8 +463,7 @@ client/
 ├── tailwind.config.js # Tailwind configuration
 ├── vite.config.js # Vite configuration
 └── package.json # Dependencies
-
-text
+```
 
 ---
 
@@ -475,8 +472,6 @@ text
 ### Run Backend Tests
 cd server
 npm test
-
-text
 
 ### Test Coverage
 - Authentication (register, login)
