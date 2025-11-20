@@ -134,7 +134,7 @@ This project demonstrates a production-ready full-stack application with a focus
 
 ### Backend Architecture (MVC Pattern)
 
----
+```text
 server/
 ├── config/ # Database and app configuration
 ├── controllers/ # Business logic (thin, focused functions)
@@ -142,7 +142,7 @@ server/
 ├── routes/ # API endpoints (routing only)
 ├── middleware/ # Reusable middleware (auth, error handling)
 └── utils/ # Helper functions (validators, JWT, constants)
-
+```
 ---
 
 **Why This Structure Scales:**
@@ -154,14 +154,14 @@ server/
 
 
 ### Frontend Architecture
-
+```text
 client/src/
 ├── components/ # Reusable UI components
 ├── pages/ # Route-level page components
 ├── context/ # Global state management (Auth)
 ├── services/ # API calls abstraction layer
 └── utils/ # Helper functions and constants
-
+```
 **Design Patterns Implemented:**
 - ✅ **Service Layer Pattern**: API calls separated from components
 - ✅ **Context Pattern**: Global authentication state management
@@ -394,7 +394,7 @@ All errors follow this format:
 ---
 
 ## 📁 Project Structure
-
+```text
 ### Complete Backend Structure
 server/
 ├── config/
@@ -425,8 +425,6 @@ server/
 ├── .gitignore # Git ignore rules
 ├── server.js # Entry point
 └── package.json # Dependencies
-
-text
 
 ### Complete Frontend Structure
 client/
@@ -465,8 +463,7 @@ client/
 ├── tailwind.config.js # Tailwind configuration
 ├── vite.config.js # Vite configuration
 └── package.json # Dependencies
-
-text
+```
 
 ---
 
@@ -475,8 +472,6 @@ text
 ### Run Backend Tests
 cd server
 npm test
-
-text
 
 ### Test Coverage
 - Authentication (register, login)
