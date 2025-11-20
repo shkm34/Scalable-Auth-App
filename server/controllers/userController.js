@@ -1,5 +1,6 @@
 import { validationResult } from 'express-validator';
 import User from '../models/User.js';
+import { HTTP_STATUS } from '../utils/constants.js';
 
 // @desc    Get user profile
 // @route   GET /api/users/profile
@@ -10,13 +11,13 @@ export const getProfile = async (req, res) => {
     const user = await User.findById(req.user._id);
 
     if (!user) {
-      return res.status(404).json({
+      return res.status(HTTP_STATUS.NOT_FOUND).json({
         success: false,
         message: 'User not found'
       });
     }
 
-    res.status(200).json({
+    res.status(HTTP_STATUS.OK).json({
       success: true,
       data: {
         user: {
@@ -30,7 +31,7 @@ export const getProfile = async (req, res) => {
     });
   } catch (error) {
     console.error('Get profile error:', error);
-    res.status(500).json({
+    res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
       success: false,
       message: 'Server error',
       error: process.env.NODE_ENV === 'development' ? error.message : undefined
@@ -49,7 +50,7 @@ export const updateProfile = async (req, res) => {
     const user = await User.findById(req.user._id);
 
     if (!user) {
-      return res.status(404).json({
+      return res.status(HTTP_STATUS.NOT_FOUND).json({
         success: false,
         message: 'User not found'
       });
@@ -62,7 +63,7 @@ export const updateProfile = async (req, res) => {
     if (email && email !== user.email) {
       const emailExists = await User.findOne({ email });
       if (emailExists) {
-        return res.status(400).json({
+        return res.status(HTTP_STATUS.BAD_REQUEST).json({
           success: false,
           message: 'Email is already in use'
         });
@@ -77,7 +78,7 @@ export const updateProfile = async (req, res) => {
 
     await user.save();
 
-    res.status(200).json({
+    res.status(HTTP_STATUS.OK).json({
       success: true,
       message: 'Profile updated successfully',
       data: {
@@ -91,7 +92,7 @@ export const updateProfile = async (req, res) => {
     });
   } catch (error) {
     console.error('Update profile error:', error);
-    res.status(500).json({
+    res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
       success: false,
       message: 'Server error',
       error: process.env.NODE_ENV === 'development' ? error.message : undefined

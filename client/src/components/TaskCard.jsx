@@ -1,11 +1,13 @@
+import { TASK_STATUS } from "../utils/constants";
+
 const TaskCard = ({ task, onEdit, onDelete }) => {
   const getStatusColor = (status) => {
     switch (status) {
-      case "completed":
+      case TASK_STATUS.PENDING:
         return "bg-green-100 text-green-800";
-      case "in-progress":
+      case TASK_STATUS.IN_PROGRESS:
         return "bg-yellow-100 text-yellow-800";
-      case "pending":
+      case TASK_STATUS.COMPLETED:
         return "bg-gray-100 text-gray-800";
       default:
         return "bg-gray-100 text-gray-800";

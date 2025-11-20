@@ -1,5 +1,6 @@
 import { validationResult } from 'express-validator';
 import Task from '../models/Task.js';
+import { HTTP_STATUS } from '../utils/constants.js';
 
 // @desc    Create new task
 // @route   POST /api/tasks
@@ -9,7 +10,7 @@ export const createTask = async (req, res) => {
     // Check validation errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({
         success: false,
         errors: errors.array()
       });
@@ -25,14 +26,14 @@ export const createTask = async (req, res) => {
       userId: req.user._id
     });
 
-    res.status(201).json({
+    res.status(HTTP_STATUS.CREATED).json({
       success: true,
       message: 'Task created successfully',
       data: { task }
     });
   } catch (error) {
     console.error('Create task error:', error);
-    res.status(500).json({
+    res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
       success: false,
       message: 'Server error while creating task',
       error: process.env.NODE_ENV === 'development' ? error.message : undefined
@@ -48,7 +49,7 @@ export const getTasks = async (req, res) => {
     //validation errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({
         success: false,
         errors: errors.array()
       });
@@ -73,14 +74,14 @@ export const getTasks = async (req, res) => {
     // fetch tasks - newest first
     const tasks = await Task.find(filter).sort({ createdAt: -1 });
 
-    res.status(200).json({
+    res.status(HTTP_STATUS.OK).json({
       success: true,
       count: tasks.length,
       data: { tasks }
     });
   } catch (error) {
     console.error('tasks error:', error);
-    res.status(500).json({
+    res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
       success: false,
       message: 'Server error while fetching tasks',
       error: process.env.NODE_ENV === 'development' ? error.message : undefined
@@ -96,7 +97,7 @@ export const getTaskById = async (req, res) => {
  
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({
         success: false,
         errors: errors.array()
       });
@@ -106,7 +107,7 @@ export const getTaskById = async (req, res) => {
 
     //if task exists
     if (!task) {
-      return res.status(404).json({
+      return res.status(HTTP_STATUS.NOT_FOUND).json({
         success: false,
         message: 'Task not found'
       });
@@ -114,19 +115,19 @@ export const getTaskById = async (req, res) => {
 
     // validate if task belongs to authenticated user
     if (task.userId.toString() !== req.user._id.toString()) {
-      return res.status(403).json({
+      return res.status(HTTP_STATUS.FORBIDDEN).json({
         success: false,
         message: 'Not authorized to access this task'
       });
     }
 
-    res.status(200).json({
+    res.status(HTTP_STATUS.OK).json({
       success: true,
       data: { task }
     });
   } catch (error) {
     console.error('Get task by ID error:', error);
-    res.status(500).json({
+    res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
       success: false,
       message: 'Server error while fetching task',
       error: process.env.NODE_ENV === 'development' ? error.message : undefined
@@ -142,7 +143,7 @@ export const updateTask = async (req, res) => {
   
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({
         success: false,
         errors: errors.array()
       });
@@ -152,7 +153,7 @@ export const updateTask = async (req, res) => {
 
     // if task exists
     if (!task) {
-      return res.status(404).json({
+      return res.status(HTTP_STATUS.NOT_FOUND).json({
         success: false,
         message: 'Task not found'
       });
@@ -160,7 +161,7 @@ export const updateTask = async (req, res) => {
 
     // validate if task belong to authenticated user
     if (task.userId.toString() !== req.user._id.toString()) {
-      return res.status(403).json({
+      return res.status(HTTP_STATUS.FORBIDDEN).json({
         success: false,
         message: 'Not authorized to update this task'
       });
@@ -176,14 +177,14 @@ export const updateTask = async (req, res) => {
  
     await task.save();
 
-    res.status(200).json({
+    res.status(HTTP_STATUS.OK).json({
       success: true,
       message: 'Task updated successfully',
       data: { task }
     });
   } catch (error) {
     console.error('Update task error:', error);
-    res.status(500).json({
+    res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
       success: false,
       message: 'Server error while updating task',
       error: process.env.NODE_ENV === 'development' ? error.message : undefined
@@ -199,7 +200,7 @@ export const deleteTask = async (req, res) => {
     
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({
         success: false,
         errors: errors.array()
       });
@@ -209,7 +210,7 @@ export const deleteTask = async (req, res) => {
 
     // Check if task exists
     if (!task) {
-      return res.status(404).json({
+      return res.status(HTTP_STATUS.NOT_FOUND).json({
         success: false,
         message: 'Task not found'
       });
@@ -217,7 +218,7 @@ export const deleteTask = async (req, res) => {
 
     // Check if task belongs to authenticated user
     if (task.userId.toString() !== req.user._id.toString()) {
-      return res.status(403).json({
+      return res.status(HTTP_STATUS.FORBIDDEN).json({
         success: false,
         message: 'Not authorized to delete this task'
       });
@@ -225,13 +226,13 @@ export const deleteTask = async (req, res) => {
 
     await task.deleteOne();
 
-    res.status(200).json({
+    res.status(HTTP_STATUS.OK).json({
       success: true,
       message: 'Task deleted successfully'
     });
   } catch (error) {
     console.error('Delete task error:', error);
-    res.status(500).json({
+    res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
       success: false,
       message: 'Server error while deleting task',
       error: process.env.NODE_ENV === 'development' ? error.message : undefined

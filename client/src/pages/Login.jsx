@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { VALIDATION } from '../utils/constants';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -49,8 +50,8 @@ const Login = () => {
 
     if (!formData.password) {
       newErrors.password = 'Password is required';
-    } else if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
+    } else if (formData.password.length < VALIDATION.PASSWORD_MIN_LENGTH) {
+      newErrors.password = `Password must be at least ${VALIDATION.PASSWORD_MIN_LENGTH} characters`;
     }
 
     setErrors(newErrors);

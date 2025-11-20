@@ -2,7 +2,9 @@ import api from './api';
 
 // handles all authentication related API calls
 const authService = {
-  // register new user
+// @desc    Register new user
+// @route   POST /api/auth/register
+// @access  Public
   register: async (userData) => {
     const response = await api.post('/auth/register', userData);
     
@@ -15,7 +17,9 @@ const authService = {
     return response.data;
   },
 
-  // login user
+  //@desc    Login user
+  //@route   POST /api/auth/login
+  //@access  Public
   login: async (credentials) => {
     const response = await api.post('/auth/login', credentials);
     

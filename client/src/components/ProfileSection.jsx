@@ -3,6 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import userService from "../services/userService";
 import ErrorMessage from "./ErrorMessage";
 import SuccessMessage from "./SuccessMessage";
+import { VALIDATION } from "../utils/constants";
 
 const ProfileSection = () => {
   const { user, updateUser } = useAuth();
@@ -34,8 +35,10 @@ const ProfileSection = () => {
 
     if (!formData.name) {
       newErrors.name = "Name is required";
-    } else if (formData.name.length < 2) {
-      newErrors.name = "Name must be at least 2 characters";
+    } else if (formData.name.length < VALIDATION.NAME_MIN_LENGTH) {
+      newErrors.name = `Name must be at least ${VALIDATION.NAME_MIN_LENGTH} characters`;
+    } else if (formData.name.length > VALIDATION.NAME_MAX_LENGTH) {
+      newErrors.name = `Name cannot exceed ${VALIDATION.NAME_MAX_LENGTH} characters`;
     }
 
     if (!formData.email) {

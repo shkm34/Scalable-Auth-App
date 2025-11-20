@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { TASK_STATUS } from "../utils/constants";
 
 const SearchFilter = ({ onSearch, onFilter }) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -59,9 +60,9 @@ const SearchFilter = ({ onSearch, onFilter }) => {
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
           >
             <option value="">All Status</option>
-            <option value="pending">Pending</option>
-            <option value="in-progress">In Progress</option>
-            <option value="completed">Completed</option>
+            <option value={TASK_STATUS.PENDING}>Pending</option>
+            <option value={TASK_STATUS.IN_PROGRESS}>In Progress</option>
+            <option value={TASK_STATUS.COMPLETED}>Completed</option>
           </select>
         </div>
       </div>

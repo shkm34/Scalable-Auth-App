@@ -1,5 +1,6 @@
 import { verifyToken } from '../utils/jwt.js';
 import User from '../models/User.js';
+import { HTTP_STATUS } from '../utils/constants.js';
 
 export const protect = async (req, res, next) => {
   try {
@@ -15,7 +16,7 @@ export const protect = async (req, res, next) => {
     }
 
     if (!token) {
-      return res.status(401).json({
+      return res.status(HTTP_STATUS.UNAUTHORIZED).json({
         success: false,
         message: 'Not authorized, no token provided'
       });
@@ -28,7 +29,7 @@ export const protect = async (req, res, next) => {
     const user = await User.findById(decoded.id).select('-password');
     
     if (!user) {
-      return res.status(401).json({
+      return res.status(HTTP_STATUS.NOT_FOUND).json({
         success: false,
         message: 'User not found'
       });
@@ -39,7 +40,7 @@ export const protect = async (req, res, next) => {
     next();
   } catch (error) {
     console.error('Auth middleware error:', error);
-    res.status(401).json({
+    res.status(HTTP_STATUS.FORBIDDEN).json({
       success: false,
       message: 'Not authorized, token failed',
       error: process.env.NODE_ENV === 'development' ? error.message : undefined

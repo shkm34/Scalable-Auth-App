@@ -1,10 +1,11 @@
 import { useState} from 'react';
+import {VALIDATION, TASK_STATUS}from '../utils/constants';
 
 const TaskForm = ({ task, onSubmit, onCancel, loading }) => {
   const [formData, setFormData] = useState({
     title: task?.title || '',
     description: task?.description || '',
-    status: task?.status || 'pending'
+    status: task?.status || TASK_STATUS.PENDING
   });
 
   const [errors, setErrors] = useState({});
@@ -25,13 +26,13 @@ const TaskForm = ({ task, onSubmit, onCancel, loading }) => {
 
     if (!formData.title.trim()) {
       newErrors.title = 'Title is required';
-    } else if (formData.title.length > 100) {
+    } else if (formData.title.length > VALIDATION.TITLE_MAX_LENGTH) {
       newErrors.title = 'Title cannot exceed 100 characters';
     }
 
     if (!formData.description.trim()) {
       newErrors.description = 'Description is required';
-    } else if (formData.description.length > 500) {
+    } else if (formData.description.length > VALIDATION.DESCRIPTION_MAX_LENGTH) {
       newErrors.description = 'Description cannot exceed 500 characters';
     }
 
@@ -61,6 +62,7 @@ const TaskForm = ({ task, onSubmit, onCancel, loading }) => {
           name="title"
           value={formData.title}
           onChange={handleChange}
+          maxLength={VALIDATION.TITLE_MAX_LENGTH}
           className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 ${
             errors.title ? 'border-red-500' : 'border-gray-300'
           }`}
@@ -81,6 +83,7 @@ const TaskForm = ({ task, onSubmit, onCancel, loading }) => {
           name="description"
           value={formData.description}
           onChange={handleChange}
+          maxLength={VALIDATION.DESCRIPTION_MAX_LENGTH}
           rows="4"
           className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 ${
             errors.description ? 'border-red-500' : 'border-gray-300'
@@ -104,9 +107,9 @@ const TaskForm = ({ task, onSubmit, onCancel, loading }) => {
           onChange={handleChange}
           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
         >
-          <option value="pending">Pending</option>
-          <option value="in-progress">In Progress</option>
-          <option value="completed">Completed</option>
+          <option value={TASK_STATUS.PENDING}>Pending</option>
+          <option value={TASK_STATUS.IN_PROGRESS}>In Progress</option>
+          <option value={TASK_STATUS.COMPLETED}>Completed</option>
         </select>
       </div>
 

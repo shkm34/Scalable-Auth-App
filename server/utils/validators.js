@@ -1,5 +1,9 @@
 import { body, query, param} from 'express-validator';
+import { TASK_STATUS } from './constants.js';
 
+const TASK_STATUS_VALUES = Object.values(TASK_STATUS);
+
+// register validation
 export const registerValidation = [
   body('name')
     .trim()
@@ -23,6 +27,7 @@ export const registerValidation = [
     .withMessage('Password must be at least 6 characters')
 ];
 
+// login validation
 export const loginValidation = [
   body('email')
     .trim()
@@ -38,7 +43,7 @@ export const loginValidation = [
 ];
 
 
-
+// task validation
 export const createTaskValidation = [
   body('title')
     .trim()
@@ -56,10 +61,12 @@ export const createTaskValidation = [
   
   body('status')
     .optional()
-    .isIn(['pending', 'in-progress', 'completed'])
+    .isIn(TASK_STATUS_VALUES)
     .withMessage('Status must be one of: pending, in-progress, completed')
 ];
 
+
+// update task validation
 export const updateTaskValidation = [
   body('title')
     .optional()
@@ -79,16 +86,19 @@ export const updateTaskValidation = [
   
   body('status')
     .optional()
-    .isIn(['pending', 'in-progress', 'completed'])
+    .isIn(TASK_STATUS_VALUES)
     .withMessage('Status must be one of: pending, in-progress, completed')
 ];
 
+// task id validation
 export const taskIdValidation = [
   param('id')
     .isMongoId()
     .withMessage('Invalid task ID format')
 ];
 
+
+// search filter validation
 export const searchFilterValidation = [
   query('search')
     .optional()
@@ -98,6 +108,6 @@ export const searchFilterValidation = [
   
   query('status')
     .optional()
-    .isIn(['pending', 'in-progress', 'completed'])
+    .isIn(TASK_STATUS_VALUES)
     .withMessage('Invalid status filter')
 ];

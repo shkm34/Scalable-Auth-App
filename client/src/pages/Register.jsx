@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { VALIDATION } from '../utils/constants';
 
 const Register = () => {
     const navigate = useNavigate();
@@ -44,8 +45,8 @@ const Register = () => {
 
         if (!formData.name) {
             newErrors.name = 'Name is required';
-        } else if (formData.name.length < 2) {
-            newErrors.name = 'Name must be at least 2 characters';
+        } else if (formData.name.length < VALIDATION.NAME_MIN_LENGTH) {
+            newErrors.name = `Name must be at least ${VALIDATION.NAME_MIN_LENGTH} characters`;
         }
 
         if (!formData.email) {
@@ -56,8 +57,8 @@ const Register = () => {
 
         if (!formData.password) {
             newErrors.password = 'Password is required';
-        } else if (formData.password.length < 6) {
-            newErrors.password = 'Password must be at least 6 characters';
+        } else if (formData.password.length < VALIDATION.PASSWORD_MIN_LENGTH) {
+            newErrors.password = `Password must be at least ${VALIDATION.PASSWORD_MIN_LENGTH} characters`;
         }
 
         if (!formData.confirmPassword) {

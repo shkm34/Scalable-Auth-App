@@ -1,6 +1,7 @@
 import { validationResult } from "express-validator";
 import User from "../models/User.js";
 import { generateToken } from "../utils/jwt.js";
+import { HTTP_STATUS } from "../utils/constants.js";
 
 // @desc    Register new user
 // @route   POST /api/auth/register
@@ -11,7 +12,7 @@ export const register = async (req, res) => {
     // check validation errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({
         success: false,
         errors: errors.array(),
       });
@@ -22,7 +23,7 @@ export const register = async (req, res) => {
     // check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({
         success: false,
         message: "User with this email already exists",
       });
@@ -39,7 +40,7 @@ export const register = async (req, res) => {
     const token = generateToken(user._id);
 
     // Return user data (without password) and token
-    res.status(201).json({
+    res.status(HTTP_STATUS.CREATED).json({
       success: true,
       message: "User registered successfully",
       data: {
@@ -54,7 +55,7 @@ export const register = async (req, res) => {
     });
   } catch (error) {
     console.error("Register error:", error);
-    res.status(500).json({
+    res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
       success: false,
       message: "Server error during registration",
       error: process.env.NODE_ENV === "development" ? error.message : undefined,
@@ -71,7 +72,7 @@ export const login = async (req, res) => {
     // check validation errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({
         success: false,
         errors: errors.array()
       });
@@ -83,7 +84,7 @@ export const login = async (req, res) => {
     const user = await User.findOne({ email }).select('+password');
     
     if (!user) {
-      return res.status(401).json({
+      return res.status(HTTP_STATUS.UNAUTHORIZED).json({
         success: false,
         message: 'Invalid email or password'
       });
@@ -93,7 +94,7 @@ export const login = async (req, res) => {
     const isPasswordValid = await user.comparePassword(password);
     
     if (!isPasswordValid) {
-      return res.status(401).json({
+      return res.status(HTTP_STATUS.UNAUTHORIZED).json({
         success: false,
         message: 'Invalid email or password'
       });
@@ -103,7 +104,7 @@ export const login = async (req, res) => {
     const token = generateToken(user._id);
 
     // Return user data and token
-    res.status(200).json({
+    res.status(HTTP_STATUS.OK).json({
       success: true,
       message: 'Login successful',
       data: {
@@ -117,7 +118,7 @@ export const login = async (req, res) => {
     });
   } catch (error) {
     console.error('Login error:', error);
-    res.status(500).json({
+    res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
       success: false,
       message: 'Server error during login',
       error: process.env.NODE_ENV === 'development' ? error.message : undefined
