@@ -154,14 +154,14 @@ server/
 
 
 ### Frontend Architecture
-
+```text
 client/src/
 ├── components/ # Reusable UI components
 ├── pages/ # Route-level page components
 ├── context/ # Global state management (Auth)
 ├── services/ # API calls abstraction layer
 └── utils/ # Helper functions and constants
-
+```
 **Design Patterns Implemented:**
 - ✅ **Service Layer Pattern**: API calls separated from components
 - ✅ **Context Pattern**: Global authentication state management
